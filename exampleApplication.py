@@ -1,12 +1,24 @@
 import sys
 import argparse
 from generator import MCresample
-from reader import txtfilereader
+import reader
+from config import myConfig
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    with open("example.txt") as f:
-        pdf2d = txtfilereader.get_pdf_from_file(f)
-    events = MCresample.get_dataset(pdf2d)
+    theReader = reader.shelvereader
+    logLDistributions = {}
+
+    for iParam in theReader:
+        for _ in xrange(myConfig.nIter):
+            pdf2d = theReader.get_pdf_from_file(f)
+            events, logL = MCresample.get_dataset(pdf2d)
+            if not logLDistributions.has_key(iParam):
+                logLDistributions[iParam] = []
+            logLDistributions[iParam].append(logL)
+
+        plt.hist(logLDistributions[iParam])
+        plt.savefig(os.path.join(myConfig.plotDirectory,str(iParam) + ".png"))
 
     print "If everything worked, these are the generated events:"
     print events
