@@ -1,6 +1,6 @@
 import sys
 import argparse
-from generator import MCresample
+from generator import MCresample, asimov
 import reader
 from config import myConfig
 import matplotlib.pyplot as plt
@@ -18,6 +18,7 @@ if __name__ == "__main__":
         for _ in xrange(myConfig.nIter):
             pdf2d = iData["pdf_xy"]
             events, logL = MCresample.get_dataset(pdf2d)
+            #events, logL = asimov.get_dataset(pdf2d)
             if not logLDistributions.has_key(iParam):
                 logLDistributions[iParam] = []
             logLDistributions[iParam].append(logL)
@@ -29,7 +30,7 @@ if __name__ == "__main__":
         ax = fig.gca()
         ax.hist(logLDistributions[iParam])
         ax.set_title(r"$\log\mathcal{{L}}={:.1f}\pm{:.1f}$" "\n" r"$(\gamma={:.2f},\mathrm{{norm}}={:.2E},\mathrm{{cutoff}}={:.2E})$"\
-                     .format(mean, std, iData["gamma"], iData["cutoff"], iData["norm"]))
+                     .format(mean, std, iData["gamma"], iData["norm"], iData["cutoff"]))
         fig.savefig(os.path.join(myConfig.plotDirectory,str(iParam) + ".png"))
 
         #print events
