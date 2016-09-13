@@ -15,6 +15,6 @@ def get_dataset(pdf2d):
             for i in xrange(nEvents):
                 events.append({"E":iE, "cosZenith":iCosZ, "weight":1})
             if iMu > 0: #FIXME and maybe gamma function
-                logL += poisson.pmf(nEvents, iMu)
+                logL += np.log(poisson.pmf(nEvents, iMu))
 
     return events, logL
