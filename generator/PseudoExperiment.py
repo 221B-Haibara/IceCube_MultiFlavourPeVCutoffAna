@@ -59,4 +59,4 @@ def get_H0_LLR(PseudoSet, Max_LLH, theReader):
                 if exp >0:
                     logL[kE] += np.log(poisson.pmf(nEvents,exp ))
             
-    return logL-Max_LLH
+    return -2*(logL-Max_LLH)
