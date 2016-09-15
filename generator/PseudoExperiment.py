@@ -46,16 +46,21 @@ def get_H0_LLR(PseudoSet, Max_LLH, theReader):
        for pdf2d of H0- array(energy, cosZenith) [loopping over theReader]
     """
     pdf2d = []
+    
     #loop over Ecut
     for jParam, jData in theReader.items():
         pdf2d.append( jData["pdf_xy"])
+        
+        #print jParam
     logL = np.zeros((len(theReader),))
+
 
     for iE,iData in enumerate(PseudoSet):
         for iCosZ, iMu in enumerate(iData):
             nEvents = iMu
             for kE in xrange(len(theReader)):
                 exp = pdf2d[kE][iE][iCosZ]
+                #print kE, iE, iCosZ, exp, iMu
                 if exp >0:
                     logL[kE] += np.log(poisson.pmf(nEvents,exp ))
             
