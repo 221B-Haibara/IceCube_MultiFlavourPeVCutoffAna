@@ -7,4 +7,7 @@ inputshelve = shelve.open("./inputData/WeightMatrix.shelve","r")
 input_PEPE_shelve = shelve.open("./inputData/WeightMatrix_PEPE.shelve","r")
 input_HESE_shelve = shelve.open("./inputData/WeightMatrix_HESE.shelve","r")
 input_EHE_shelve = shelve.open("./inputData/WeightMatrix_EHE.shelve","r")
+input_gamma_PEPE_shelve = shelve.open("./inputData/WeightMatrix_PEPE_gamma.shelve","r")
+input_gamma_HESE_shelve = shelve.open("./inputData/WeightMatrix_HESE_gamma.shelve","r")
+input_gamma_EHE_shelve = shelve.open("./inputData/WeightMatrix_EHE_gamma.shelve","r")
 

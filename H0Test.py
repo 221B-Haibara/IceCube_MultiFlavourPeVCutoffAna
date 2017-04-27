@@ -1,3 +1,9 @@
+#first generate median number of events from 'fake nature'
+#then calculate the deltaLLH distribution vs cutoff energy for HESE, EHE, PEPE
+## deltaLLH vs cutoff
+#in the end find out the confident bands
+## probability vs cutoff
+#why are the probability distributiin different?
 import sys
 import argparse
 from generator import PseudoExperiment, asimov
@@ -10,33 +16,36 @@ import os
 import numpy as np
 
 if __name__ == "__main__":
-    H0_Reader = reader.H0_shelve
+    H0_Reader = reader.inputshelve #reader.H0_shelve
     theReader = reader.inputshelve
-
+    #CL_Reader = reader.inputCLshelve
     logLDistributions = {}
     EnergyBin = []
     i = 0
     #iTotal = len(theReader)
     iTotal = len(H0_Reader)
-
+    count = 0
     for iParam, iData in theReader.items():
         EnergyBin.append (iData["cutoff"])
-    for iParam, iData in H0_Reader.items():
+    for iParam, iData in H0_Reader.items(): #only use one set of specified data to generate data
         print "Processing ({}/{})...".format(i, iTotal), iParam
+        if iData["cutoff"]!= myConfig.par_cutoff or iData["gamma"]!= myConfig.par_gamma:
+            count += 1
+            continue
         for _ in xrange(myConfig.nIter):
             pdf2d = iData["pdf_xy"]
             PseudoSet = PseudoExperiment.gen_pseudo(pdf2d)
-            Max_LLH = PseudoExperiment.get_Max_LLH(PseudoSet, pdf2d)
-            #print Max_LLH
+
             #the H0 is a loop over of all other possible Ecut
-            H0_LLR = PseudoExperiment.get_H0_LLR(PseudoSet, Max_LLH, theReader)
-            #print H0_LLR
+            H0_LLR = PseudoExperiment.get_H0_LLR(PseudoSet, theReader)
 
             #events, logL = asimov.get_dataset(pdf2d)
+
+            Max_LLH = PseudoExperiment.get_Max_LLH(H0_LLR)
+            #print _, logL
             if not logLDistributions.has_key(iParam):
                 logLDistributions[iParam] = []
-            logLDistributions[iParam].append(H0_LLR)
-            #print _, logL
+            logLDistributions[iParam].append(-2*(H0_LLR-Max_LLH))
 
         store = np.transpose(logLDistributions[iParam]) #[20,1000]
         gamma = iData["gamma"]
@@ -44,7 +53,8 @@ if __name__ == "__main__":
         cutoff = EnergyBin
         print EnergyBin
         eventstring = "para"
-        outputshelve = writer.outputshelve
+        outputshelve = writer.output_Cascade_shelve
+        #what it does is to generate -2LLR distributions when prior is set at H1 and scan over H0
         shelvewriter.write_shelve(outputshelve = outputshelve, index = eventstring, gamma = gamma, norm = norm, cutoff = cutoff, LLH = store )
         #shelvewriter.write_shelve(outputshelve = "outputShelve.shelve", index = 1, 2.49,8,1000, LLH =store )
 
