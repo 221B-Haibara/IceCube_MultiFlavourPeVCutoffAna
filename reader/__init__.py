@@ -1,13 +1,5 @@
 import shelve
-H0_shelve = shelve.open("./inputData/H0_wE3_cascade.shelve","r")
-H0_PEPE_shelve = shelve.open("./inputData/H0_wE3_cascade_PEPE.shelve","r")
-#H0_HESE_shelve = shelve.open("./inputData/H0_wE3_cascade_HESE.shelve","r")
-#H0_EHE_shelve = shelve.open("./inputData/H0_wE3_cascade_EHE.shelve","r")
-inputshelve = shelve.open("./inputData/WeightMatrix.shelve","r")
-input_PEPE_shelve = shelve.open("./inputData/WeightMatrix_PEPE.shelve","r")
-input_HESE_shelve = shelve.open("./inputData/WeightMatrix_HESE.shelve","r")
-input_EHE_shelve = shelve.open("./inputData/WeightMatrix_EHE.shelve","r")
-input_gamma_PEPE_shelve = shelve.open("./inputData/WeightMatrix_PEPE_gamma.shelve","r")
-input_gamma_HESE_shelve = shelve.open("./inputData/WeightMatrix_HESE_gamma.shelve","r")
-input_gamma_EHE_shelve = shelve.open("./inputData/WeightMatrix_EHE_gamma.shelve","r")
-
+input_PEPE_shelve_3d = shelve.open("./inputData/WeightMatrix_3d_PEPE_nue.shelve","r")
+input_HESE_shelve_3d = shelve.open("./inputData/WeightMatrix_3d_HESE_nue.shelve","r")
+input_EHE_shelve_3d = shelve.open("./inputData/WeightMatrix_3d_EHE_numu.shelve","r")
+input_PEPE_shelve_3d_05 = shelve.open("./inputData/WeightMatrix_3d_PEPE_nue_0.5.shelve","r")

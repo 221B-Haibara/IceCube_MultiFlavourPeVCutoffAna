@@ -17,8 +17,10 @@ import os
 import numpy as np
 
 if __name__ == "__main__":
-    #H0_Reader = reader.input_HESE_shelve_3d #reader.H0_shelve
+    #H0_Reader = reader.input_PEPE_shelve_3d #reader.H0_shelve
     H0_Reader = reader.input_HESE_shelve_3d #reader.H0_shelve
+    #H0_Reader = reader.input_EHE_shelve_3d #reader.H0_shelve
+    #H0_Reader = reader.input_PEPE_shelve_3d_05 #reader.H0_shelve
     
     logLDistributions = {}
     EnergyBin = []
