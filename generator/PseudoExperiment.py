@@ -23,7 +23,7 @@ def gen_pseudo(pdf2d): #effectively H1 case
 
 
 
-def get_Max_LLH(H0_LLR): #effectively H1 case
+def get_Max_LLH(H0_LLR,energyThresBin = 0): #effectively H1 case
     """
     To find out the maximum likelihood value by looping over H0_LLR and find out max    
     """
@@ -47,7 +47,42 @@ for i in xrange(len(testbins_gamma)):
                     para_bin.append([Ecut,gamma,norm])
                     
 
-def get_H0_LLR(PseudoSet, theReader):
+def get_H0_LLR(PseudoSet, theReader, energyThresBin = 0):
+    """
+x    Calculate LLH ratio for a given set of psedo dataset generated at H1
+       for pdf2d of H0- array(energy, cosZenith) [loopping over theReader]
+    """
+    pdf2d = []
+    
+    #loop over Ecut
+    for jParam in para_bin: 
+        jData = theReader.get("{}_{}_{}".format(jParam[1],jParam[2],jParam[0]))
+        pdf2d.append( jData["pdf_xy"])
+        
+        #print jParam
+    logL = np.zeros((len(theReader),))
+
+
+    for iE,iData in enumerate(PseudoSet):
+        if iE < energyThresBin: #only use high energy
+        #if iE >=7: #only use low energy
+            continue
+        for iCosZ, iMu in enumerate(iData):
+            nEvents = iMu
+            for kE in xrange(len(theReader)):
+                expec = pdf2d[kE][iE][iCosZ]
+                #print kE, iE, iCosZ, exp, iMu
+                if expec >0.:
+                    #print nEvents*wrongNormHack,expec*wrongNormHack, np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
+                    #logL[kE] += np.log(poisson.pmf(nEvents*wrongNormHack,expec*wrongNormHack))
+                    #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
+                     
+                    logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                    
+    return logL*(-1.)
+
+
+def max_bin(PseudoSet, theReader, maxLLH, energyThresBin = 0):
     """
     Calculate LLH ratio for a given set of psedo dataset generated at H1
        for pdf2d of H0- array(energy, cosZenith) [loopping over theReader]
@@ -64,7 +99,7 @@ def get_H0_LLR(PseudoSet, theReader):
 
 
     for iE,iData in enumerate(PseudoSet):
-        if iE <7: #only use high energy
+        if iE < energyThresBin: #only use high energy
         #if iE >=7: #only use low energy
             continue
         for iCosZ, iMu in enumerate(iData):
@@ -78,5 +113,35 @@ def get_H0_LLR(PseudoSet, theReader):
                     #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
                      
                     logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                if logL[kE]*-1. ==maxLLH:
+                    print "*** best fit *** ", para_bin[kE], logL[kE]*-1
+                    bestfitE = para_bin[kE]
+    return bestfitE
+
+
+def get_Sat_LLR(PseudoSet, energyThresBin = 0):
+    """
+    Calculate LLH ratio for a given set of psedo dataset generated at H1
+       for pdf2d of H0- array(energy, cosZenith) [loopping over theReader]
+    """
+
+    logL = 0
+    ndf=0
+    for iE,iData in enumerate(PseudoSet):
+        if iE < energyThresBin: #only use high energ
+            continue
+        for iCosZ, iMu in enumerate(iData):
+
+            ndf+=1
+            nEvents = iMu
+            expec = PseudoSet[iE][iCosZ]
+            print "debugging meow", iE, iCosZ, expec*wrongNormHack, nEvents*wrongNormHack
+            #print kE, iE, iCosZ, exp, iMu
+            if expec >0.:
+                #print nEvents*wrongNormHack,expec*wrongNormHack, np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
+                #logL[kE] += np.log(poisson.pmf(nEvents*wrongNormHack,expec*wrongNormHack))
+                #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
+
+                logL += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
                     
-    return logL*(-1.)
+    return logL*(-1.),ndf
