@@ -33,6 +33,9 @@ class myConfig:
     par_norm = testbins_norm[par_normbin]   
     #par_cutoff = 2481628.92284
 
+    bin_edges_energy = {"track":[ 4.,4.2,4.4,4.6,4.8,5.,5.2,5.4,5.6,5.8,6.,6.2,6.4,6.6,6.8,7.,7.2,7.4,7.6], "cascade":[ 4.,4.2,4.4,4.6,4.8,5.,5.2,5.4,5.6,5.8,6.,6.2,6.4,6.6,6.8,7.,7.2,7.4,7.6]} # x
+    bin_edges_zenith = {"track":[ -1.00000000e+00,-8.00000000e-01,-6.00000000e-01,-4.00000000e-01,-2.00000000e-01,-2.22044605e-16,2.00000000e-01,4.00000000e-01,6.00000000e-01,8.00000000e-01,1.00000000e+00], "cascade":[ -1, 0, 1]} # cos(z), y-coord
+
 
     
     outputshelve = "Confidence_gamma_"+str(par_gamma)+"_"+str(par_cutoff)+str(par_norm)+".shelve"
