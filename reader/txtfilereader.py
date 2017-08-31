@@ -7,9 +7,8 @@ def get_pdf_from_file(fname, cfg):
     df.zenith = np.cos(np.deg2rad(df.zenith))
     df.energy = np.log10(df.energy)
     trackorcas = "cascade" if ("PEPE" in fname or "HESE" in fname) else "track"
-    print df
-    hist = np.histogram2d(df.energy, df.zenith, bins=[cfg.bin_edges_energy[trackorcas], cfg.bin_edges_zenith[trackorcas]])
-    print hist
+    pdf_xy = np.histogram2d(df.energy, df.zenith, bins=[cfg.bin_edges_energy[trackorcas], cfg.bin_edges_zenith[trackorcas]])[0]
+    return pdf_xy
 
 
         
