@@ -32,9 +32,9 @@ if __name__ == "__main__":
         for iParam, iData in H0_Reader.items(): #only use one set of specified data to generate data
             print "Processing ({}/{})...".format(count, iTotal), iParam
 
-            H0_LLR = PseudoExperiment.get_H0_LLR(pdf2d, H0_Reader)
+            H0_LLR = PseudoExperiment.get_H0_LLR(pdf2d, H0_Reader, 8)
 
-            Max_LLH = PseudoExperiment.get_Max_LLH(H0_LLR)
+            Max_LLH = PseudoExperiment.get_Max_LLH(H0_LLR, 8)
 
             if not logLDistributions.has_key(iParam):
                 logLDistributions[iParam] = []
@@ -59,8 +59,10 @@ if __name__ == "__main__":
                 fig = plt.figure()
                 ax = fig.gca()
                 ax.hist(store[iE][:], bins = 200)
-                ax.set_title(r"LLHratio_$\log\mathcal{{L}}={:.1f}\pm{:.1f}$" "\n" r"$(\gamma={:.2f},\mathrm{{norm}}={:.2E},\mathrm{{cutoff}}={:.2E})$"\
-                             .format(mean, std, iData["gamma"], iData["norm"], iData["cutoff"]))
+                ax.set_yscale("log",nonposy='clip')
+                ax.set_title(("{}_data".format(ana)))
+                #ax.set_title(r"LLHratio_$\log\mathcal{{L}}={:.1f}\pm{:.1f}$" "\n" r"$(\gamma={:.2f},\mathrm{{norm}}={:.2E},\mathrm{{cutoff}}={:.2E})$"\
+                 #            .format(mean, std, iData["gamma"], iData["norm"], iData["cutoff"]))
                 fig.savefig(os.path.join(myConfig.plotDirectory,"data_LLHR_{}_".format(ana) + str(iParam) +"_"+ str(iE) + ".png"))
 
             #print events

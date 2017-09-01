@@ -32,6 +32,7 @@ def get_Max_LLH(H0_LLR,energyThresBin = 0): #effectively H1 case
     return logL
 
 wrongNormHack = 3.13170779665e-17
+wrongNormHack_data = 3.13170779665e-17*6./4.6
 
 testbins_gamma=np.arange(1.59, 2.9, 0.05)
 #testbins=np.logspace(6, 7.5, 20)
@@ -77,7 +78,8 @@ x    Calculate LLH ratio for a given set of psedo dataset generated at H1
                     #logL[kE] += np.log(poisson.pmf(nEvents*wrongNormHack,expec*wrongNormHack))
                     #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
                      
-                    logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                    #logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                    logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack_data * np.log(expec*wrongNormHack));
                     
     return logL*(-1.)
 
@@ -111,8 +113,8 @@ def max_bin(PseudoSet, theReader, maxLLH, energyThresBin = 0):
                     #print nEvents*wrongNormHack,expec*wrongNormHack, np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
                     #logL[kE] += np.log(poisson.pmf(nEvents*wrongNormHack,expec*wrongNormHack))
                     #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
-                     
-                    logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                    #logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                    logL[kE] += ( expec*wrongNormHack- nEvents*wrongNormHack_data * np.log(expec*wrongNormHack));
                 if logL[kE]*-1. ==maxLLH:
                     print "*** best fit *** ", para_bin[kE], logL[kE]*-1
                     bestfitE = para_bin[kE]
@@ -135,13 +137,13 @@ def get_Sat_LLR(PseudoSet, energyThresBin = 0):
             ndf+=1
             nEvents = iMu
             expec = PseudoSet[iE][iCosZ]
-            print "debugging meow", iE, iCosZ, expec*wrongNormHack, nEvents*wrongNormHack
+            print "debugging meow", iE, iCosZ, expec*wrongNormHack, nEvents*wrongNormHack_data
             #print kE, iE, iCosZ, exp, iMu
             if expec >0.:
                 #print nEvents*wrongNormHack,expec*wrongNormHack, np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
                 #logL[kE] += np.log(poisson.pmf(nEvents*wrongNormHack,expec*wrongNormHack))
                 #logL[kE] +=np.log(gammafunc.pdf(nEvents*wrongNormHack,expec*wrongNormHack))
-
-                logL += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                #logL += ( expec*wrongNormHack- nEvents*wrongNormHack * np.log(expec*wrongNormHack));
+                logL += ( expec*wrongNormHack- nEvents*wrongNormHack_data * np.log(expec*wrongNormHack));
                     
     return logL*(-1.),ndf
